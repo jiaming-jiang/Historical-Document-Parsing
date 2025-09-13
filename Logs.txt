@@ -1,0 +1,50 @@
+19/02/2025 Update
+
+Pipeline tested on "tome_2.pdf": OCR -> Patent segmentation -> Fuzzymatching
+
+Results: 44 (matched) out of 79 (detected) out of 102
+
+Future Improvement:
+    OCR quality
+    More accurate regex pattern
+    More features to extract 
+    Matching algorithm
+
+
+Black and White (√)
+manually correct regex
+bounding Box
+train a layout recognition model
+pero-ocr
+
+OCR evaluation:
+    spellcheck
+    correct manually
+    ocr-eval
+
+
+03/03/2025 Update
+
+Non-Black&White volumes
+
+"tome_12".pdf 
+
+preprocessing: changing beige to white
+
+7 matched out of 43 detected out of 91 (1161-1071)
+
+OCR evaluation (just for reference)
+
+alternative ocr tools:
+    pero-ocr
+    PaddlePaddle
+    olmOCR
+
+
+01/04/2025 Update
+
+Experimented different BW_preprocessing methods&parameters
+43 detected -> 30 matched out of 72 detected
+
+Incorporated bbox info for enriched patent detection and metadata extraction
+72 detected -> 59 detected
