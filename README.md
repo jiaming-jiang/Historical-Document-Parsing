@@ -1,31 +1,28 @@
-# Brevet OCR & Metadata Extraction — Handoff Guide
+#Handoff Guide
 
-A concise guide to run, understand, and extend the notebook-driven pipeline that OCRs **tome PDFs**, detects **BREVET** header blocks with bounding boxes, extracts **per‑patent metadata**, and **matches** results to a reference database.
+A concise pipeline that OCRs **tome PDFs**, detects **BREVET** header blocks with bounding boxes, extracts **per‑patent metadata**, and **matches** results to a reference database.
 
 ---
 
 ## 1) Project in one page
-**Context**: You have scanned “tome” PDFs (multi‑page). We need reliable OCR, better accuracy via B/W preprocessing, detection of the **BREVET** header block per page (with coordinates), extraction of patent metadata (number/date/page), and fuzzy matching against a master database.
+**Context**: We have scanned “tome” PDFs (multi‑page) in both color and BW. We need reliable OCR, detection of the **BREVET** header block per page (with coordinates), extraction of patent metadata (number/date/page), and fuzzy matching against a master database.
 
 **Goal**: Produce structured tables (CSV/XLSX) per tome with: page‑level OCR text, per‑block bounding boxes, extracted metadata, and links/matches to the reference DB.
 
 **What exists (root notebooks)**
-- **OCR.ipynb** — PDF→images→OCR text (baseline)
 - **BW.ipynb** — single B/W preprocessing pipeline + OCR
 - **BW_test.ipynb** — compare multiple B/W variants (diagnostic)
-- **brevet_bbox_detection.ipynb** — find *BREVET* lines + compute bounding boxes
-- **Detection.ipynb** — regex/heuristic parsing of OCR text → per‑patent records
-- **new_pipeline.ipynb** — integrated flow (OCR DF → text → metadata → bbox)
-- **Fuzzymatch.ipynb** — join extracted records to `patent_database.xlsx`
+- **OCR.ipynb** — PDF→images→OCR text (baseline)
 - **OCR-EVAL.ipynb** — quick quality metrics to choose the best B/W approach
+- **Detection.ipynb** — regex/heuristic parsing of OCR text → per‑patent records
+- **Fuzzymatch.ipynb** — join extracted records to `patent_database.xlsx`
+- **new_pipeline.ipynb** — integrated flow with extra bbox info (OCR DF → text → metadata → bbox)
 
 ---
 
 ## 2) Quick setup
 - **Python** 3.10, **Tesseract** installed (ensure it’s on PATH)
-- Install deps: `pip install -r requirements.txt`
-- Recommended folders (optional):
-  - `data/raw/` (PDFs), `data/pages/` (page_###.png), `data/ocr/` (text), `data/tables/` (XLSX)
+
 
 ---
 
@@ -70,18 +67,3 @@ A concise guide to run, understand, and extend the notebook-driven pipeline that
 - **Matches**: `matched_patents*.xlsx`
 
 ---
-
-## 5) What to do next
-- Standardize parameters (DPI, PSM/OEM, threshold method) in **new_pipeline.ipynb**.
-- Move shared helpers into a small `src/` module; import in notebooks.
-- Add a simple CLI for headless runs; persist intermediate OCR DFs (parquet).
-- Tighten parsers/regexes and date normalization; constrain fuzzy candidates by tome/page.
-- Consider `rapidfuzz` for speed and add a few unit tests for the parsers.
-
----
-
-## 6) Troubleshooting (quick)
-- **Tesseract not found** → set `pytesseract.pytesseract.tesseract_cmd` to the executable path.
-- **Poor OCR** → increase DPI; try adaptive thresholding + denoise; tweak `psm`.
-- **BBoxes look off** → confirm coordinate system and that OCR is run with `image_to_data`.
-- **Bad matches** → normalize accents/punctuation; lowercase consistently; limit candidates.
